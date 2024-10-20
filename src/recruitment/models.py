@@ -22,20 +22,17 @@ class Candidate(models.Model):
     )
     name = models.CharField(
         verbose_name="Nome do Candidato",
-        name="Nome",
         max_length=100,
         null=False,
         blank=False,
     )
     birthday = models.DateField(
         verbose_name="Data de Nascimento do Candidato",
-        name="Data de Nascimento",
         null=False,
         blank=False,
     )
     sex = models.CharField(
         verbose_name="Sexo do Candidato",
-        name="Sexo",
         choices=SEX_CHOICES,
         max_length=1,
         null=False,
@@ -43,7 +40,6 @@ class Candidate(models.Model):
     )
     breed = models.CharField(
         verbose_name="Raça do Candidato",
-        name="Raça",
         choices=BREED_CHOICES,
         max_length=7,
         null=False,
@@ -51,7 +47,6 @@ class Candidate(models.Model):
     )
     phone = models.CharField(
         verbose_name="Numero de Telefone do Candidato",
-        name="Telefone",
         max_length=16,
         null=False,
         blank=False,
@@ -61,23 +56,15 @@ class Candidate(models.Model):
     )
     email = models.EmailField(
         verbose_name="Email do Candidato",
-        name="Email",
         null=False,
         blank=False,
     )
     url_linkedin = models.URLField(
         verbose_name="Url do Linkedin do Candidato",
-        name="Linkedin",
         null=False,
         blank=False,
     )
 
-    # def save(self, *args, **kwargs):
-    #     if self.birthday >= date.today():
-    #         raise ValidationError(
-    #             "A data de nascimento deve ser menor que a data atual"
-    #         )
-    #     super(Event, self).save(*args, **kwargs)
     def clean(self):
         if self.birthday >= date.today():
             raise ValidationError(
@@ -95,38 +82,33 @@ class ProfessionalExperience(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     position = models.CharField(
         verbose_name="Cargo da Experiência",
-        name="Cargo",
         max_length=100,
         null=False,
         blank=False,
     )
     company = models.CharField(
         verbose_name="Nome da Empresa da Experiência",
-        name="Empresa",
         max_length=100,
         null=False,
         blank=False,
     )
     start_date = models.DateField(
         verbose_name="Data de inicío da Experiência",
-        name="Data Inicío",
         null=False,
         blank=False,
     )
     end_date = models.DateField(
         verbose_name="Data de Fim da Experiência",
-        name="Data Fim",
         null=True,
         blank=False,
     )
     description = models.TextField(
         verbose_name="Descrição da Experiência",
-        name="Descrição",
         null=False,
         blank=False,
     )
 
-    def save(self, *args, **kwargs):
+    def clean(self):
         if self.start_date >= date.today():
             raise ValidationError("A data de início deve ser menor que a data atual")
         if self.end_date is not None:
@@ -136,7 +118,6 @@ class ProfessionalExperience(models.Model):
                 raise ValidationError(
                     "A data de fim deve ser maior que a data de inicio"
                 )
-        super(Event, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.id} - {self.position}"
@@ -157,14 +138,12 @@ class Education(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     institution = models.CharField(
         verbose_name="Nome da Instituição de Formaçâo",
-        name="Instuição",
         max_length=200,
         null=False,
         blank=False,
     )
     level = models.CharField(
         verbose_name="Nível de Escolaridade",
-        name="Escolaridade",
         choices=LEVEL_CHOICES,
         max_length=2,
         null=False,
@@ -172,25 +151,22 @@ class Education(models.Model):
     )
     course = models.CharField(
         verbose_name="Nome do Curso",
-        name="Curso",
         max_length=100,
         null=False,
         blank=False,
     )
     start_date = models.DateField(
         verbose_name="Data Inicio do Curso",
-        name="Data Início",
         null=False,
         blank=False,
     )
     end_date = models.DateField(
         verbose_name="Data Fim do Curso",
-        name="Data Fim",
         null=True,
         blank=False,
     )
 
-    def save(self, *args, **kwargs):
+    def clean(self):
         if self.start_date >= date.today():
             raise ValidationError("A data de inicio deve ser menor que a data atual")
         if self.end_date is not None:
@@ -200,7 +176,6 @@ class Education(models.Model):
                 raise ValidationError(
                     "A data de fim deve ser maior que a data de início"
                 )
-        super(Event, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.id} - {self.course}"
