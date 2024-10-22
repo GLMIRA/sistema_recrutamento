@@ -1,0 +1,26 @@
+{%load recruitment_tags %}
+<h1>Lista de Experiecias do Candidato</h1>
+<table>
+    <tr>
+        <th>id</th>
+        <th>Candidato</th>
+        <th>Posição</th>
+        <th>Empresa</th>
+        <th>Data de Início</th>
+        <th>Data de Fim</th>
+        <th>Descrição</th>
+    </tr>
+    {%for professional_experience in professional_experiences%}
+    <tr>
+        <td><a href="{{ request.path }}/{{ professional_experience.id }}">{{professional_experience.id}}</a></td>
+        <td>{{professional_experience.candidate}}</td>
+        <td>{{professional_experience.position}}</td>
+        <td>{{professional_experience.company}}</td>
+        <td>{{professional_experience.start_date|format_date:"%d/%m/%Y"}}</td>
+        <td>{{professional_experience.end_date|format_date:"%d/%m/%Y"}}</td>
+        <td>{{professional_experience.description}}</td>
+    </tr>
+    {%endfor%}
+</table>
+<p></p>
+<p><a href="{{request.path }}/criar">Clique aqui para criar uma nova experiência profissional</a></p>

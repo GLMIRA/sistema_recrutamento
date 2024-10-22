@@ -1,0 +1,18 @@
+{%load recruitment_tags %}
+<ul>
+    <li>{{professional_experience|verbose_name:"candidate"}}:{{professional_experience.candidate}}</li>
+    <li>{{professional_experience|verbose_name:"position"}}:{{professional_experience.position}}</li>
+    <li>{{professional_experience|verbose_name:"company"}}:{{professional_experience.company}}</li>
+    <li>{{professional_experience|verbose_name:"start_date"}}:{{professional_experience.start_date|format_date:"%d/%m/%Y"}}
+    </li>
+    <li>{{professional_experience|verbose_name:"end_date"}}:{{professional_experience.end_date|format_date:"%d/%m/%Y"}}
+    </li>
+    <li>{{professional_experience|verbose_name:"description"}}:{{professional_experience.description}}</li>
+</ul>
+
+<h2>Editar Experiencia</h2>
+<form method="post">
+    {%csrf_token%}
+    {{form.as_p}}
+    <button type="submit">Salvar</button>
+</form>
