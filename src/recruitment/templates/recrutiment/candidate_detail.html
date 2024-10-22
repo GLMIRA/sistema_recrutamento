@@ -1,0 +1,10 @@
+{%load recruitment_tags %}
+<ul>
+    <li>{{candidate|verbose_name:"name"}}:{{candidate.name}}</li>
+    <li>{{candidate|verbose_name:"birthday"}}:{{candidate.birthday|format_date:"%d/%m/%Y"}}</li>
+    <li>{{candidate|verbose_name:"sex"}}:{{candidate|display_choice:"sex"}}</li>
+    <li>{{candidate|verbose_name:"breed"}}:{{candidate|display_choice:"breed"}}</li>
+    <li>{{candidate|verbose_name:"phone"}}:{{candidate.phone}}</li>
+    <li>{{candidate|verbose_name:"email"}}:{{candidate.email}}</li>
+    <li>{{candidate|verbose_name:"url_linkedin"}}:{{candidate.url_linkedin}}</li>
+</ul>
