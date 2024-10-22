@@ -19,3 +19,16 @@ class ProfessionalExperienceForm(forms.ModelForm):
             "end_date",
             "description",
         ]
+
+
+class EducationForm(forms.ModelForm):
+    class Meta:
+        model = models.Education
+        fields = [
+            "candidate",
+            "institution",
+            "level",
+            "course",
+            "start_date",
+            "end_date",
+        ]

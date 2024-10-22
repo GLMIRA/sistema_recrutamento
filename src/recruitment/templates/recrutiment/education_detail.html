@@ -1,0 +1,18 @@
+{%load recruitment_tags %}
+<ul>
+    <li>{{education|verbose_name:"candidate"}}:{{education.candidate}}</li>
+    <li>{{education|verbose_name:"institution"}}:{{education.institution}}</li>
+    <li>{{education|verbose_name:"level"}}:{{education|display_choice:"level"}}</li>
+    <li>{{education|verbose_name:"course"}}:{{education.course}}
+    </li>
+    <li>{{education|verbose_name:"start_date"}}:{{education.start_date|format_date:"%d/%m/%Y"}}</li>
+    <li>{{education|verbose_name:"end_date"}}:{{education.end_date|format_date:"%d/%m/%Y"}}
+    </li>
+</ul>
+
+<h2>Editar Experiencia</h2>
+<form method="post">
+    {%csrf_token%}
+    {{form.as_p}}
+    <button type="submit">Salvar</button>
+</form>

@@ -25,4 +25,20 @@ urlpatterns = [
         views.professional_experience_list,
         name="professional_experience_list",
     ),
+    # Education
+    path(
+        "candidato/<int:candidate_id>/escolaridade/<int:education_id>",
+        views.education_detail,
+        name="education_detail",
+    ),
+    path(
+        "candidato/<int:candidate_id>/escolaridade/criar",
+        views.education_create,
+        name="education_create",
+    ),
+    path(
+        "candidato/<int:candidate_id>/escolaridade",
+        views.education_list,
+        name="education_list",
+    ),
 ]

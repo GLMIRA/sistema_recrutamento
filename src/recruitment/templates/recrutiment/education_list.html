@@ -1,0 +1,26 @@
+{%load recruitment_tags %}
+<h1>Lista de Formações Educacionais</h1>
+<table>
+    <tr>
+        <th>id</th>
+        <th>Candidato</th>
+        <th>Instituição</th>
+        <th>Nivel</th>
+        <th>Curso</th>
+        <th>Data de Início</th>
+        <th>Data de Fim</th>
+    </tr>
+    {%for education in educations%}
+    <tr>
+        <td><a href="{{ request.path }}/{{ education.id }}">{{education.id}}</a></td>
+        <td>{{education.candidate}}</td>
+        <td>{{education.institution}}</td>
+        <td>{{education.get_level_display}}</td>
+        <td>{{education.course}}</td>
+        <td>{{education.start_date|format_date:"%d/%m/%Y"}}</td>
+        <td>{{education.end_date|format_date:"%d/%m/%Y"}}</td>
+    </tr>
+    {%endfor%}
+</table>
+<p></p>
+<p><a href="{{request.path }}/criar">Criar nova Formação </a></p>

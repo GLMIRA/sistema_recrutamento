@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, get_list_or_40
 from django.http import HttpResponse, HttpRequest
 from django.template import loader
 from .models import Candidate, ProfessionalExperience, Education
-from .forms import CandidateForm, ProfessionalExperienceForm
+from .forms import CandidateForm, ProfessionalExperienceForm, EducationForm
 
 
 def index(request):
@@ -97,7 +97,7 @@ def professional_experience_detail(
         )
         if form.is_valid():
             form.save()
-            redirect("/")
+            return redirect("/")
     else:
         form = ProfessionalExperienceForm(instance=professional_experience)
     return render(
@@ -116,10 +116,10 @@ def professional_experience_create(
 ) -> HttpResponse:
     candidate = get_object_or_404(Candidate, id=candidate_id)
     if request.method == "POST":
-        form = ProfessionalExperienceForm(request.POST, candidate=candidate_id)
+        form = ProfessionalExperienceForm(request.POST)
         if form.is_valid():
             form.save()
-            redirect("/")
+            return redirect("/")
     else:
         form = ProfessionalExperienceForm()
     return render(
@@ -138,4 +138,55 @@ def professional_experience_list(
         request,
         "recrutiment/professional_experience_list.html",
         {"candidate": candidate, "professional_experiences": experiences},
+    )
+
+
+# Education_views
+def education_detail(
+    request: HttpRequest, candidate_id: int, education_id: int
+) -> HttpResponse:
+    candidate = get_object_or_404(Candidate, id=candidate_id)
+    education = get_object_or_404(Education, id=education_id, candidate=candidate)
+    if request.method == "POST":
+        form = EducationForm(request.POST, instance=education)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+    else:
+        form = EducationForm(instance=education)
+
+    return render(
+        request,
+        "recrutiment/education_detail.html",
+        {
+            "form": form,
+            "candidate": candidate,
+            "education": education,
+        },
+    )
+
+
+def education_create(request: HttpRequest, candidate_id: int) -> HttpResponse:
+    candidate = get_object_or_404(Candidate, id=candidate_id)
+    if request.method == "POST":
+        form = EducationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+    else:
+        form = EducationForm()
+    return render(
+        request,
+        "recrutiment/education_create.html",
+        {"form": form, "candidate": candidate},
+    )
+
+
+def education_list(request: HttpRequest, candidate_id: int) -> HttpResponse:
+    candidate = get_object_or_404(Candidate, id=candidate_id)
+    educations = get_list_or_404(Education, candidate=candidate)
+    return render(
+        request,
+        "recrutiment/education_list.html",
+        {"candidate": candidate, "educations": educations},
     )

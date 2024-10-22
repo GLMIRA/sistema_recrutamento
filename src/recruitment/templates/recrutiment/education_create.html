@@ -1,0 +1,8 @@
+<h1>Criar Formação</h1>
+<form method="POST">
+    {%csrf_token%}
+    {{form.as_p}}
+    <button type="subimit">Salvar</button>
+</form>
+<p></p>
+<p><a href="javascript:history.back()">voltar</a></p>
