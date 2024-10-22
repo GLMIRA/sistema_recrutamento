@@ -84,7 +84,8 @@ def professional_experience_detail(
         professional_id (int): O ID da experiência profissional.
 
     Returns:
-        HttpResponse: Renderiza o template com os detalhes da
+        HttpResponse: Redireciona a pagian inicial ou
+        reenderiza o template com os detalhes da
         experiência profissional.
     """
     candidate = get_object_or_404(Candidate, id=candidate_id)
@@ -114,6 +115,16 @@ def professional_experience_detail(
 def professional_experience_create(
     request: HttpRequest, candidate_id: int
 ) -> HttpResponse:
+    """funçao pra criar uma experincia profissional
+
+    Args:
+        request (HttpRequest): a requisição Http.(GET OU POST)
+        candidate_id (int): id do candidato
+
+    Returns:
+        HttpResponse: Redireciona a pagian inicial ou
+        reenderiza um template HTML com o formulario a ser preenchido
+    """
     candidate = get_object_or_404(Candidate, id=candidate_id)
     if request.method == "POST":
         form = ProfessionalExperienceForm(request.POST)
@@ -132,6 +143,15 @@ def professional_experience_create(
 def professional_experience_list(
     request: HttpRequest, candidate_id: int
 ) -> HttpResponse:
+    """Lista todos as experiencias profisionais de um candidato
+
+    Args:
+        request (HttpRequest): a requisição Http.(GET OU POST)
+        candidate_id (int): id do candidato
+
+    Returns:
+        HttpResponse: mostra todas as experiencias do candidato
+    """
     candidate = get_object_or_404(Candidate, id=candidate_id)
     experiences = get_list_or_404(ProfessionalExperience, candidate=candidate)
     return render(
@@ -145,6 +165,19 @@ def professional_experience_list(
 def education_detail(
     request: HttpRequest, candidate_id: int, education_id: int
 ) -> HttpResponse:
+    """Função para visualizar detalhes da Formação Educacional
+        de um candidato.
+
+    Args:
+        request (HttpRequest): a requisição Http.(GET OU POST)
+        candidate_id (int): O ID do candidato.
+        professional_id (int): O ID da Escolaridade do candidato
+
+    Returns:
+        HttpResponse: Redireciona a pagian inicial ou
+        reenderiza o template com os detalhes da
+        experiência profissional.
+    """
     candidate = get_object_or_404(Candidate, id=candidate_id)
     education = get_object_or_404(Education, id=education_id, candidate=candidate)
     if request.method == "POST":
@@ -167,6 +200,16 @@ def education_detail(
 
 
 def education_create(request: HttpRequest, candidate_id: int) -> HttpResponse:
+    """Função pra criar uma Formação Educacional
+
+    Args:
+        request (HttpRequest): a requisição Http.(GET OU POST)
+        candidate_id (int): id do candidato
+
+    Returns:
+        HttpResponse: Redireciona a pagian inicial ou
+        reenderiza um template HTML com o formulario a ser preenchido
+    """
     candidate = get_object_or_404(Candidate, id=candidate_id)
     if request.method == "POST":
         form = EducationForm(request.POST)
@@ -183,6 +226,16 @@ def education_create(request: HttpRequest, candidate_id: int) -> HttpResponse:
 
 
 def education_list(request: HttpRequest, candidate_id: int) -> HttpResponse:
+    """Lista todos as formaçoes Educacionais do Candidadto
+
+    Args:
+        request (HttpRequest): a requisição Http.(GET OU POST)
+        candidate_id (int): id do candidato
+
+    Returns:
+        HttpResponse: mostra todas as experiencias do candidato
+    """
+
     candidate = get_object_or_404(Candidate, id=candidate_id)
     educations = get_list_or_404(Education, candidate=candidate)
     return render(
