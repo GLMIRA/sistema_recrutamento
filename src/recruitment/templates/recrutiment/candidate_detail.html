@@ -8,3 +8,10 @@
     <li>{{candidate|verbose_name:"email"}}:{{candidate.email}}</li>
     <li>{{candidate|verbose_name:"url_linkedin"}}:{{candidate.url_linkedin}}</li>
 </ul>
+
+<h2>Editar candidato</h2>
+<form method="post">
+    {%csrf_token%}
+    {{form.as_p}}
+    <button type="submit">Salvar</button>
+</form>
