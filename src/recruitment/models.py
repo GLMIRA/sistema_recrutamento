@@ -112,7 +112,7 @@ class ProfessionalExperience(models.Model):
         if self.start_date >= date.today():
             raise ValidationError("A data de início deve ser menor que a data atual")
         if self.end_date is not None:
-            if self.end_date >= date.today():
+            if self.end_date == date.today():
                 raise ValidationError("A data de fim deve ser maior que a data atual")
             if self.end_date < self.start_date:
                 raise ValidationError(
@@ -170,7 +170,7 @@ class Education(models.Model):
         if self.start_date >= date.today():
             raise ValidationError("A data de inicio deve ser menor que a data atual")
         if self.end_date is not None:
-            if self.end_date >= date.today():
+            if self.end_date == date.today():
                 raise ValidationError("A data de fim deve ser maior que a data atual")
             if self.end_date < self.start_date:
                 raise ValidationError(
