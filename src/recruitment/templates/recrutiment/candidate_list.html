@@ -1,5 +1,41 @@
-{%load recruitment_tags %}
+{% extends "recrutiment/layout.html" %}
+
+{% block title %}Cadastro - Pegho{% endblock %}
+
+{% block content %}
 <h1>Lista de Candidatos</h1>
+
+{% load django_bootstrap5 %}
+{% load recruitment_tags %}
+
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    a.novo-candidato {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    a.novo-candidato:hover {
+        background-color: #0056b3;
+    }
+</style>
+
 <table>
     <tr>
         <th>id</th>
@@ -11,9 +47,9 @@
         <th>Email</th>
         <th>Url Linkedin</th>
     </tr>
-    {%for candidate in candidates%}
+    {% for candidate in candidates %}
     <tr>
-        <td><a href="{{request.path}}/{{candidate.id}}">{{candidate.id}}</a></td>
+        <td><a href="{{ request.path }}/{{ candidate.id }}">{{candidate.id}}</a></td>
         <td>{{candidate.name}}</td>
         <td>{{candidate.birthday|format_date:"%d/%m/%Y"}}</td>
         <td>{{candidate.get_sex_display}}</td>
@@ -22,7 +58,9 @@
         <td>{{candidate.email}}</td>
         <td>{{candidate.url_linkedin}}</td>
     </tr>
-    {%endfor%}
+    {% endfor %}
 </table>
-<p></p>
-<p><a href="{{request.path}}/criar">Clique aqui para criar um candidato</a></p>
+
+<p><a class="novo-candidato" href="{{ request.path }}/criar">Clique aqui para criar um candidato</a></p>
+
+{% endblock %}
