@@ -1,0 +1,50 @@
+{%load django_bootstrap5%}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewimpor" content="width=device.width, initial-scale=1.0">
+    <title>{%block title%}Pegho{%endblock%}</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Pegho</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/recruitment/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/recruitment/candidato/criar">Registration</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pricing</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container mt-4">
+        {% block content %}
+        <!-- Conteúdo específico da página -->
+        {% endblock %}
+    </div>
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">&copy; 2024 Pegho</span>
+        </div>
+    </footer>
+</body>
+
+</html>
