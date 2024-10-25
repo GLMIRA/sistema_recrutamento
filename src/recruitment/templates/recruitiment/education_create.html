@@ -1,0 +1,45 @@
+{% extends "recruitiment/layout.html" %}
+
+{% block title %}Cadastro - Pegho{% endblock %}
+
+{% block content %}
+<h1>Criar Formação</h1>
+
+{% load django_bootstrap5 %}
+
+<form method="POST" class="row g-3">
+    {% csrf_token %}
+
+    <div class="col-md-6">
+        {% bootstrap_field form.candidate placeholder="Candidato" %}
+    </div>
+
+    <div class="col-md-6">
+        {% bootstrap_field form.institution placeholder="Nome da Instituição" %}
+    </div>
+
+    <div class="col-md-6">
+        {% bootstrap_field form.level placeholder="Nível de Escolaridade" %}
+    </div>
+
+    <div class="col-md-6">
+        {% bootstrap_field form.course placeholder="Nome do Curso" %}
+    </div>
+
+    <div class="col-md-6">
+        {% bootstrap_field form.start_date placeholder="Data de Início" %}
+    </div>
+
+    <div class="col-md-6">
+        {% bootstrap_field form.end_date placeholder="Data de Término" %}
+    </div>
+
+    <div class="col-12 text-center">
+        <button type="submit" class="btn btn-primary me-2">Salvar</button>
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+    </div>
+</form>
+
+{% endblock %}

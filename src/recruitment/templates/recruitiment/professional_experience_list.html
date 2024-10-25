@@ -1,0 +1,67 @@
+{% extends "recruitiment/layout.html" %}
+
+{% block title %}Cadastro - Pegho{% endblock %}
+
+{% block content %}
+<h1>Lista de Experiências do {{candidate.name}}</h1>
+
+{% load django_bootstrap5 %}
+{% load recruitment_tags %}
+
+<!-- Estilo para bordas e espaçamento na tabela -->
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        text-align: left;
+    }
+
+
+    a.nova-experiencia {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    a.nova-experiencia:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<table>
+    <tr>
+        <th>id</th>
+        <th>Candidato</th>
+        <th>Posição</th>
+        <th>Empresa</th>
+        <th>Data de Início</th>
+        <th>Data de Fim</th>
+        <th>Descrição</th>
+    </tr>
+    {% for professional_experience in professional_experiences %}
+    <tr>
+        <td><a href="{{ request.path }}/{{ professional_experience.id }}">{{professional_experience.id}}</a></td>
+        <td>{{professional_experience.candidate}}</td>
+        <td>{{professional_experience.position}}</td>
+        <td>{{professional_experience.company}}</td>
+        <td>{{professional_experience.start_date|format_date:"%d/%m/%Y"}}</td>
+        <td>{{professional_experience.end_date|format_date:"%d/%m/%Y"}}</td>
+        <td>{{professional_experience.description}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p><a class="nova-experiencia" href="{{ request.path }}/criar">Clique aqui para criar uma nova experiência
+        profissional</a></p>
+
+{% endblock %}

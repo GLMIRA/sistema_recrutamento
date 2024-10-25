@@ -1,0 +1,142 @@
+{% extends "recruitiment/layout.html" %}
+
+{% block title %}Cadastro - Pegho{% endblock %}
+
+{% block content %}
+<h1>Curriculo</h1>
+<h3>{{candidate.name}}</h3>
+{% load django_bootstrap5 %}
+
+<style>
+    .btn-adicionar-experiencia {
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 2.5px;
+        transition: background-color 0.3s;
+        /* Transição suave ao passar o mouse */
+    }
+
+    .btn-adicionar-experiencia:hover {
+        background-color: #0056b3;
+        /* Cor do botão ao passar o mouse */
+    }
+</style>
+{% load recruitment_tags %}
+{% load recruitment_tags %}
+<div class="card my-4">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Dados Pessoais</h3>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">{{ candidate|verbose_name:"birthday" }}:</dt>
+            <dd class="col-sm-8">{{ candidate.birthday|format_date:"%d/%m/%Y" }}</dd>
+
+            <dt class="col-sm-4">{{ candidate|verbose_name:"sex" }}:</dt>
+            <dd class="col-sm-8">{{ candidate|display_choice:"sex" }}</dd>
+
+            <dt class="col-sm-4">{{ candidate|verbose_name:"breed" }}:</dt>
+            <dd class="col-sm-8">{{ candidate|display_choice:"breed" }}</dd>
+
+            <dt class="col-sm-4">{{ candidate|verbose_name:"phone" }}:</dt>
+            <dd class="col-sm-8">{{ candidate.phone }}</dd>
+
+            <dt class="col-sm-4">{{ candidate|verbose_name:"email" }}:</dt>
+            <dd class="col-sm-8">{{ candidate.email }}</dd>
+
+            <dt class="col-sm-4">{{ candidate|verbose_name:"url_linkedin" }}:</dt>
+            <dd class="col-sm-8">
+                <a href="{{ candidate.url_linkedin }}" target="_blank">{{ candidate.url_linkedin }}</a>
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<h3>Dados Acadêmicos</h3>
+
+{% if educations %}
+<table class="table table-striped ">
+    <tr>
+        <th></th>
+        <th>Instituição</th>
+        <th>Nível</th>
+        <th>Curso</th>
+        <th>Data de Início</th>
+        <th>Data de Fim</th>
+    </tr>
+    {% for education in educations %}
+    <tr>
+        <td>
+            <a href="{% url 'education_detail' candidate_id=education.candidate.id education_id=education.id %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path
+                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                    <path fill-rule="evenodd"
+                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                </svg>
+            </a>
+        </td>
+        <td>{{ education.institution }}</td>
+        <td>{{ education.get_level_display }}</td>
+        <td>{{ education.course }}</td>
+        <td>{{ education.start_date|format_date:"%d/%m/%Y" }}</td>
+        {%if education.end_date%}
+        <td>{{ education.end_date|format_date:"%d/%m/%Y" }}</td>
+        {%else%}
+        <td>-</td>
+        {%endif%}
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<h5>Candidato não declarou informações acadêmicas</h5>
+{% endif %}
+<a class="btn-adicionar-experiencia" href="{% url 'education_create' candidate.id %}">Adicionar Formação</a>
+<h3>Experiências</h3>
+{% if experiences %}
+<table class="table table-striped">
+    <tr>
+        <th></th>
+        <th>Posição</th>
+        <th>Empresa</th>
+        <th>Descrição</th>
+        <th>Data de Início</th>
+        <th>Data de Fim</th>
+    </tr>
+    {% for experience in experiences %}
+    <tr>
+        <td>
+            <a
+                href="{% url 'professional_experience_detail' candidate_id=experience.candidate.id experience_id=experience.id %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path
+                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                    <path fill-rule="evenodd"
+                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                </svg>
+            </a>
+        </td>
+        <td>{{ experience.position }}</td>
+        <td>{{ experience.company }}</td>
+        <td>{{ experience.description }}</td>
+        <td>{{ experience.start_date|format_date:"%d/%m/%Y" }}</td>
+        {%if experience.end_date%}
+        <td>{{ experience.end_date|format_date:"%d/%m/%Y" }}</td>
+        {%else%}
+        <td>-</td>
+        {%endif%}
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<h5>Candidato não tem experiências profissionais</h5>
+{% endif %}
+<a class="btn-adicionar-experiencia" href="{% url 'professional_experience_create' candidate.id %}">Adicionar
+    Experiência</a>
+
+{% endblock %}

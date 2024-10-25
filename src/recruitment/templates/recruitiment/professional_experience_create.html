@@ -1,0 +1,44 @@
+{% extends "recruitiment/layout.html" %}
+
+{% block title %}Criar Experiência - Pegho{% endblock %}
+
+{% block content %}
+<h1>Criar uma Experiência para {{ candidate.name }}</h1>
+
+{% load django_bootstrap5 %}
+
+<form method="POST" class="row g-3">
+    {% csrf_token %}
+
+    <div class="col-md-6">
+        {% bootstrap_field form.candidate placeholder="Candidato" %}
+    </div>
+
+    <div class="col-md-6">
+        {% bootstrap_field form.position placeholder="Cargo" %}
+    </div>
+
+    <div class="col-md-6">
+        {% bootstrap_field form.company placeholder="Nome da Empresa" %}
+    </div>
+
+    <div class="col-md-6">
+        {% bootstrap_field form.start_date placeholder="Data de Início" %}
+    </div>
+
+    <div class="col-md-6">
+        {% bootstrap_field form.end_date placeholder="Data de Término" %}
+    </div>
+
+    <div class="col-md-12">
+        {% bootstrap_field form.description placeholder="Descrição" %}
+    </div>
+
+    <div class="col-12 text-center">
+        <button type="submit" class="btn btn-primary me-2">Salvar</button>
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+    </div>
+</form>
+{% endblock %}

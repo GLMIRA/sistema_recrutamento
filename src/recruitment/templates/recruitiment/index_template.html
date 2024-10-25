@@ -1,0 +1,50 @@
+{% extends "recruitiment/layout.html" %}
+
+{% block title %}Cadastro - Pegho{% endblock %}
+{% load django_bootstrap5 %}
+{% block content %}
+<h1 class="display-1">Banco de Talentos</h1>
+<form method="POST" action="{% url 'index' %}">
+    <div class="card" id="curriculoCard">
+        <div class="card-header">
+            Criar um Curriculo
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Bem-vindo ao banco de talentos da Pegho</h5>
+            <p class="card-text">Vamos criar seu curriculo, clique no botão abaixo</p>
+            <button type="submit" class="btn btn-primary">Criar um Curriculo</button>
+        </div>
+    </div>
+    {% csrf_token %}
+</form>
+
+<script>
+    // Verificar o estado do modo escuro ao carregar a página
+    const isDarkMode = localStorage.getItem('dark-mode') === 'enabled';
+    const card = document.getElementById('curriculoCard');
+
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        card.classList.add('bg-dark', 'text-white'); // Ativa o modo escuro para o card
+    } else {
+        card.classList.add('bg-light'); // Ativa o modo claro para o card
+    }
+
+    // Alterna o modo ao clicar no botão
+    const toggleButton = document.getElementById('darkModeToggle');
+    toggleButton.addEventListener('click', function () {
+        document.body.classList.toggle('dark-mode');
+        if (document.body.classList.contains('dark-mode')) {
+            card.classList.remove('bg-light');
+            card.classList.add('bg-dark', 'text-white'); // Aplica o modo escuro
+            localStorage.setItem('dark-mode', 'enabled'); // Salva o estado no localStorage
+            toggleButton.innerHTML = '🌞'; // Muda para ícone de sol
+        } else {
+            card.classList.remove('bg-dark', 'text-white');
+            card.classList.add('bg-light'); // Aplica o modo claro
+            localStorage.removeItem('dark-mode'); // Remove o estado do localStorage
+            toggleButton.innerHTML = '🌙'; // Muda para ícone de lua
+        }
+    });
+</script>
+{% endblock %}
