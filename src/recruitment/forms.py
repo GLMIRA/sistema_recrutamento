@@ -12,7 +12,7 @@ class ProfessionalExperienceForm(forms.ModelForm):
     class Meta:
         model = models.ProfessionalExperience
         fields = [
-            "candidate",
+            # "candidate",
             "position",
             "company",
             "start_date",
@@ -25,7 +25,8 @@ class EducationForm(forms.ModelForm):
     class Meta:
         model = models.Education
         fields = [
-            "candidate",
+            # TODO: PRoblemas com os formularios de criar e editar
+            # "candidate",
             "institution",
             "level",
             "course",
