@@ -66,9 +66,10 @@ class Candidate(models.Model):
     )
 
     def clean(self):
-        if self.birthday >= date.today():
+        # Verifica se birthday não é None antes de fazer a comparação
+        if self.birthday and self.birthday > date.today():
             raise ValidationError(
-                "A data de nascimento deve ser menor que a data atual"
+                "A data de nascimento deve ser anterior ou igual à data atual."
             )
 
     def __str__(self):
@@ -100,7 +101,7 @@ class ProfessionalExperience(models.Model):
     end_date = models.DateField(
         verbose_name="Data de Fim da Experiência",
         null=True,
-        blank=False,
+        blank=True,
     )
     description = models.TextField(
         verbose_name="Descrição da Experiência",
@@ -163,7 +164,7 @@ class Education(models.Model):
     end_date = models.DateField(
         verbose_name="Data Fim do Curso",
         null=True,
-        blank=False,
+        blank=True,
     )
 
     def clean(self):
