@@ -6,10 +6,12 @@ from .forms import CandidateForm, ProfessionalExperienceForm, EducationForm
 
 
 def index(request):
-    return HttpResponse("index")
+    if request.method == "POST":
+        return redirect(f"/recruitment/candidato/criar")
+    return render(request, "recruitiment/index_template.html")
 
 
-# Parte Candidatos
+# Candidatos
 def candidate_detail(request: HttpRequest, candidate_id: int) -> HttpResponse:
     """funaço para editar candiadto
 
@@ -26,12 +28,12 @@ def candidate_detail(request: HttpRequest, candidate_id: int) -> HttpResponse:
         form = CandidateForm(request.POST, instance=candidate)
         if form.is_valid():
             form.save()
-            return redirect("/")
+            return redirect(f"/recruitment/candidato/{candidate.id}/curriculo")
     else:
         form = CandidateForm(instance=candidate)
     return render(
         request,
-        "recrutiment/candidate_detail.html",
+        "recruitiment/candidate_detail.html",
         {"form": form, "candidate": candidate},
     )
 
@@ -49,11 +51,11 @@ def candidate_create(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = CandidateForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect("/")
+            candidate = form.save()
+            return redirect(f"/recruitment/candidato/{candidate.id}/curriculo")
     else:
         form = CandidateForm()
-    return render(request, "recrutiment/candidate_create.html", {"form": form})
+    return render(request, "recruitiment/candidate_create.html", {"form": form})
 
 
 def candidate_list(request: HttpRequest) -> HttpResponse:
@@ -67,7 +69,7 @@ def candidate_list(request: HttpRequest) -> HttpResponse:
     """
     candidates = get_list_or_404(Candidate)
     return render(
-        request, "recrutiment/candidate_list.html", {"candidates": candidates}
+        request, "recruitiment/candidate_list.html", {"candidates": candidates}
     )
 
 
@@ -98,12 +100,12 @@ def professional_experience_detail(
         )
         if form.is_valid():
             form.save()
-            return redirect("/")
+            return redirect(f"/recruitment/candidato/{candidate.id}/curriculo")
     else:
         form = ProfessionalExperienceForm(instance=professional_experience)
     return render(
         request,
-        "recrutiment/professional_experience_detail.html",
+        "recruitiment/professional_experience_detail.html",
         {
             "form": form,
             "professional_experience": professional_experience,
@@ -130,12 +132,12 @@ def professional_experience_create(
         form = ProfessionalExperienceForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("/")
+            return redirect(f"/recruitment/candidato/{candidate.id}/curriculo")
     else:
         form = ProfessionalExperienceForm()
     return render(
         request,
-        "recrutiment/professional_experience_create.html",
+        "recruitiment/professional_experience_create.html",
         {"form": form, "candidate": candidate},
     )
 
@@ -156,7 +158,7 @@ def professional_experience_list(
     experiences = get_list_or_404(ProfessionalExperience, candidate=candidate)
     return render(
         request,
-        "recrutiment/professional_experience_list.html",
+        "recruitiment/professional_experience_list.html",
         {"candidate": candidate, "professional_experiences": experiences},
     )
 
@@ -184,13 +186,13 @@ def education_detail(
         form = EducationForm(request.POST, instance=education)
         if form.is_valid():
             form.save()
-            return redirect("/")
+            return redirect(f"/recruitment/candidato/{candidate.id}/curriculo")
     else:
         form = EducationForm(instance=education)
 
     return render(
         request,
-        "recrutiment/education_detail.html",
+        "recruitiment/education_detail.html",
         {
             "form": form,
             "candidate": candidate,
@@ -215,12 +217,12 @@ def education_create(request: HttpRequest, candidate_id: int) -> HttpResponse:
         form = EducationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("/")
+            return redirect(f"/recruitment/candidato/{candidate.id}/curriculo")
     else:
         form = EducationForm()
     return render(
         request,
-        "recrutiment/education_create.html",
+        "recruitiment/education_create.html",
         {"form": form, "candidate": candidate},
     )
 
@@ -240,6 +242,20 @@ def education_list(request: HttpRequest, candidate_id: int) -> HttpResponse:
     educations = get_list_or_404(Education, candidate=candidate)
     return render(
         request,
-        "recrutiment/education_list.html",
+        "recruitiment/education_list.html",
         {"candidate": candidate, "educations": educations},
+    )
+
+
+# Curriculo Completo
+
+
+def curriculum(request: HttpRequest, candidate_id: int) -> HttpResponse:
+    candidate = get_object_or_404(Candidate, id=candidate_id)
+    educations = Education.objects.filter(candidate=candidate)
+    experiences = ProfessionalExperience.objects.filter(candidate=candidate)
+    return render(
+        request,
+        "recruitiment/curriculum.html",
+        {"candidate": candidate, "educations": educations, "experiences": experiences},
     )

@@ -41,4 +41,5 @@ urlpatterns = [
         views.education_list,
         name="education_list",
     ),
+    path("candidato/<int:candidate_id>/curriculo", views.curriculum, name="curriculum"),
 ]
