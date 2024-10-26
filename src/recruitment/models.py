@@ -2,6 +2,7 @@ from datetime import date
 from django.db import models
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 
 
 class Candidate(models.Model):
@@ -20,6 +21,12 @@ class Candidate(models.Model):
         regex=r"[1-9]{2} 9[0-9]{4}-[0-9]{4}",
         message="O telefone deve estar no formato: 99 99999-9999",
     )
+    # user = models.OneToOneField(
+    # User,
+    # on_delete=models.CASCADE,
+    # name="id",
+    # primary_key=True,
+    # )
     name = models.CharField(
         verbose_name="Nome do Candidato",
         max_length=100,

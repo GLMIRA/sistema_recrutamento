@@ -2,9 +2,58 @@ from django.shortcuts import render, redirect, get_object_or_404, get_list_or_40
 from django.http import HttpResponse, HttpRequest
 from django.template import loader
 from .models import Candidate, ProfessionalExperience, Education
-from .forms import CandidateForm, ProfessionalExperienceForm, EducationForm
+from .forms import (
+    CandidateForm,
+    ProfessionalExperienceForm,
+    EducationForm,
+    UserForm,
+    LoginForm,
+)
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 
+def staff_required(user):
+    return user.is_staff
+
+
+def user_register(request: HttpRequest):
+    """"""
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)  # Não salva ainda no banco
+            user.set_password(form.cleaned_data["password"])
+            form.save()
+            return redirect("user_login")
+    else:
+        form = UserForm()
+
+    return render(request, "recruitiment/user_register.html", {"form": form})
+
+
+def user_login(request: HttpRequest):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                print("entrei aqui")
+                login(request, user)
+                return redirect("index")
+            else:
+                print("entrei_aqui_2")
+                form.add_error(None, "usuario ou senha invalidos")
+    else:
+        form = LoginForm()
+
+    return render(request, "recruitiment/user_login.html", {"form": form})
+
+
+@login_required(login_url="user_login")
 def index(request):
     if request.method == "POST":
         return redirect(f"/recruitment/candidato/criar")
@@ -12,6 +61,7 @@ def index(request):
 
 
 # Candidatos
+@login_required(login_url="user_login")
 def candidate_detail(request: HttpRequest, candidate_id: int) -> HttpResponse:
     """funaço para editar candiadto
 
@@ -38,6 +88,7 @@ def candidate_detail(request: HttpRequest, candidate_id: int) -> HttpResponse:
     )
 
 
+@login_required(login_url="user_login")
 def candidate_create(request: HttpRequest) -> HttpResponse:
     """funaço para criar candiadto
 
@@ -58,6 +109,8 @@ def candidate_create(request: HttpRequest) -> HttpResponse:
     return render(request, "recruitiment/candidate_create.html", {"form": form})
 
 
+@login_required(login_url="user_login")
+@user_passes_test(staff_required)
 def candidate_list(request: HttpRequest) -> HttpResponse:
     """Lista todos os Candidatos
 
@@ -74,6 +127,7 @@ def candidate_list(request: HttpRequest) -> HttpResponse:
 
 
 # Parte Profisional
+@login_required(login_url="user_login")
 def professional_experience_detail(
     request: HttpRequest, candidate_id: int, experience_id: int
 ):
@@ -114,6 +168,7 @@ def professional_experience_detail(
     )
 
 
+@login_required(login_url="user_login")
 def professional_experience_create(
     request: HttpRequest, candidate_id: int
 ) -> HttpResponse:
@@ -142,6 +197,8 @@ def professional_experience_create(
     )
 
 
+@login_required(login_url="user_login")
+@user_passes_test(staff_required)
 def professional_experience_list(
     request: HttpRequest, candidate_id: int
 ) -> HttpResponse:
@@ -164,6 +221,7 @@ def professional_experience_list(
 
 
 # Education_views
+@login_required(login_url="user_login")
 def education_detail(
     request: HttpRequest, candidate_id: int, education_id: int
 ) -> HttpResponse:
@@ -201,6 +259,7 @@ def education_detail(
     )
 
 
+@login_required(login_url="user_login")
 def education_create(request: HttpRequest, candidate_id: int) -> HttpResponse:
     """Função pra criar uma Formação Educacional
 
@@ -227,6 +286,8 @@ def education_create(request: HttpRequest, candidate_id: int) -> HttpResponse:
     )
 
 
+@login_required(login_url="user_login")
+@user_passes_test(staff_required)
 def education_list(request: HttpRequest, candidate_id: int) -> HttpResponse:
     """Lista todos as formaçoes Educacionais do Candidadto
 
@@ -250,6 +311,7 @@ def education_list(request: HttpRequest, candidate_id: int) -> HttpResponse:
 # Curriculo Completo
 
 
+@login_required(login_url="user_login")
 def curriculum(request: HttpRequest, candidate_id: int) -> HttpResponse:
     candidate = get_object_or_404(Candidate, id=candidate_id)
     educations = Education.objects.filter(candidate=candidate)
