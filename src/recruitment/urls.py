@@ -1,8 +1,15 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework import routers
+from . import views, views_apis
+
+router_api = routers.DefaultRouter()
+router_api.register(r"candidates", views_apis.CandidateViewSet)
+
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("cadastro", views.user_register, name="register_user"),
+    path("login", views.user_login, name="user_login"),
     # Candidate
     path(
         "candidato/<int:candidate_id>", views.candidate_detail, name="candidato_detail"
@@ -42,4 +49,7 @@ urlpatterns = [
         name="education_list",
     ),
     path("candidato/<int:candidate_id>/curriculo", views.curriculum, name="curriculum"),
+    # -----urls das Apis----- #
+    path("api/", include(router_api.urls)),
+    path("api/", include("rest_framework.urls", namespace="rest_framework")),
 ]
