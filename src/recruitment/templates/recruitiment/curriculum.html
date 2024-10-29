@@ -51,7 +51,7 @@
                 <a href="{{ candidate.url_linkedin }}" target="_blank">{{ candidate.url_linkedin }}</a>
             </dd>
         </dl>
-        <a href="{% url 'candidate_detail' username=candidate.id %}" class="btn btn-primary">Editar dados
+        <a href="{% url 'candidate_detail' %}" class="btn btn-primary">Editar dados
             Pessoais</a>
     </div>
 </div>
@@ -71,7 +71,7 @@
     {% for education in educations %}
     <tr>
         <td>
-            <a href="{% url 'education_detail' candidate_username=candidate.id education_id=education.id %}">
+            <a href="{% url 'education_detail' education_id=education.id %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-pencil-square" viewBox="0 0 16 16">
                     <path
@@ -96,7 +96,7 @@
 {% else %}
 <h5>Candidato não declarou informações acadêmicas</h5>
 {% endif %}
-<a class="btn-adicionar-experiencia" href="{% url 'education_create' candidate.id %}">Adicionar Formação</a>
+<a class="btn-adicionar-experiencia" href="{% url 'education_create'%}">Adicionar Formação</a>
 <h3>Experiências</h3>
 {% if experiences %}
 <table class="table table-striped">
@@ -111,8 +111,7 @@
     {% for experience in experiences %}
     <tr>
         <td>
-            <a
-                href="{% url 'professional_experience_detail' candidate_username=candidate.id experience_id=experience.id %}">
+            <a href="{% url 'professional_experience_detail' experience_id=experience.id %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-pencil-square" viewBox="0 0 16 16">
                     <path
@@ -137,7 +136,7 @@
 {% else %}
 <h5>Candidato não tem experiências profissionais</h5>
 {% endif %}
-<a class="btn-adicionar-experiencia" href="{% url 'professional_experience_create' candidate.id %}">Adicionar
+<a class="btn-adicionar-experiencia" href="{% url 'professional_experience_create' %}">Adicionar
     Experiência</a>
 
 {% endblock %}

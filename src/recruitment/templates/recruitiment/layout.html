@@ -1,10 +1,10 @@
 {% load django_bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 {% csrf_token %}
 <html lang="en">
 
 <head>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Pegho{% endblock %}</title>
@@ -81,17 +81,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/recruitment/">Home</a>
-                            <!-- TODO:alterar o nome -->
+                            <a class="nav-link active" aria-current="page" href="/recruitment/">Banco de Talentos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/recruitment/candidato/criar">Registration</a>
+                            <a class="nav-link" href="/recruitment/cadastro">Registration</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Add</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Edit</a>
+                            <a class="nav-link" href="/recruitment/login">Login</a>
                         </li>
                     </ul>
                     <button class="btn btn-outline-dark ms-auto" id="darkModeToggle">🌙</button>

@@ -30,13 +30,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Candidate
+        model = models.Education
+        fields = "__all__"
+
+
+class ProfessionalExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ProfessionalExperience
         fields = "__all__"
 
 
 class CandidateSerializer(serializers.ModelSerializer):
 
     educations = EducationSerializer(many=True, read_only=True)
+    prfessional_experience = ProfessionalExperienceSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Candidate

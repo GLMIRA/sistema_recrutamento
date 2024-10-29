@@ -27,16 +27,20 @@ class CandidateViewSet(viewsets.ModelViewSet):
 
 
 class EducationViewSet(viewsets.ModelViewSet):
-    # queryset = models.Education.objects.all()
     serializer_class = serializers.EducationSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         print(self.kwargs["candidate_pk"])
-        print(models.Education.objects.filter(candidate=self.kwargs["candidate_pk"]))
         return models.Education.objects.filter(candidate=self.kwargs["candidate_pk"])
 
-    # def performe_create(self, serializer):
-    #     candidate_id = self.kwargs.get("candidate_pk")
-    #     candidate = get_object_or_404(models.Candidate.objects.get(pk=candidate_id))
-    #     serializer.save(candidate=candidate)
+
+class ProfessionalExperienceViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.ProfessionalExperienceSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        print(self.kwargs["candidate_pk"])
+        return models.ProfessionalExperience.objects.filter(
+            candidate=self.kwargs["candidate_pk"]
+        )
