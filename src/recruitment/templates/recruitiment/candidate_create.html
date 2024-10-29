@@ -9,6 +9,7 @@
 
 <form method="POST" class="row g-3">
     {% csrf_token %}
+    <input type="hidden" name="id" value="{{request.user.username}}">
 
     <div class="col-md-6">
         {% bootstrap_field form.name placeholder="Nome do Candidato" %}

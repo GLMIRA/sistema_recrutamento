@@ -41,11 +41,9 @@ def user_login(request: HttpRequest):
             password = form.cleaned_data.get("password")
             user = authenticate(username=username, password=password)
             if user is not None:
-                print("entrei aqui")
                 login(request, user)
-                return redirect("index")
+                return redirect("index", username=username)
             else:
-                print("entrei_aqui_2")
                 form.add_error(None, "usuario ou senha invalidos")
     else:
         form = LoginForm()
@@ -54,15 +52,26 @@ def user_login(request: HttpRequest):
 
 
 @login_required(login_url="user_login")
-def index(request):
+def index(request: HttpRequest, username: str):
+    user = User.objects.get(username=username)
+    candidate = Candidate.objects.filter(id=user).first()
     if request.method == "POST":
-        return redirect(f"/recruitment/candidato/criar")
-    return render(request, "recruitiment/index_template.html")
+        if candidate is None:
+            return redirect(f"/recruitment/candidato/criar")
+        else:
+            return redirect(f"/recruitment/candidato/{username}/curriculo")
+    return render(
+        request,
+        "recruitiment/index_template.html",
+        {"username": username},
+    )
 
 
-# Candidatos
+# ________________________Candidatos________________________ #
+
+
 @login_required(login_url="user_login")
-def candidate_detail(request: HttpRequest, candidate_id: int) -> HttpResponse:
+def candidate_detail(request: HttpRequest, username: str) -> HttpResponse:
     """funaço para editar candiadto
 
     Args:
@@ -73,7 +82,8 @@ def candidate_detail(request: HttpRequest, candidate_id: int) -> HttpResponse:
         HttpResponse: Redireciona para a página inicial após salvar ou
         renderiza o template com o formulário preenchido para edição.
     """
-    candidate = get_object_or_404(Candidate, id=candidate_id)
+    user = get_object_or_404(User, username=username)
+    candidate = get_object_or_404(Candidate, id=user)
     if request.method == "POST":
         form = CandidateForm(request.POST, instance=candidate)
         if form.is_valid():
@@ -99,19 +109,28 @@ def candidate_create(request: HttpRequest) -> HttpResponse:
         HttpResponse: Redireciona para a página inicial após salvar ou
         renderiza o template com o formulário vazio para criacao.
     """
+
     if request.method == "POST":
         form = CandidateForm(request.POST)
         if form.is_valid():
-            candidate = form.save()
+            print("estou salvando")
+            candidate = form.save(commit=False)
+            candidate.id = request.user
+            candidate.save()
+            print(candidate)
             return redirect(f"/recruitment/candidato/{candidate.id}/curriculo")
+        else:
+            print("nao salvei")
+            print(form.errors)
     else:
+        print(request.user)
         form = CandidateForm()
     return render(request, "recruitiment/candidate_create.html", {"form": form})
 
 
 @login_required(login_url="user_login")
 @user_passes_test(staff_required)
-def candidate_list(request: HttpRequest) -> HttpResponse:
+def candidate_list(request: HttpRequest, username: str) -> HttpResponse:
     """Lista todos os Candidatos
 
     Args:
@@ -126,17 +145,19 @@ def candidate_list(request: HttpRequest) -> HttpResponse:
     )
 
 
-# Parte Profisional
+# ________________________Parte Profisional________________________ #
+
+
 @login_required(login_url="user_login")
 def professional_experience_detail(
-    request: HttpRequest, candidate_id: int, experience_id: int
+    request: HttpRequest, candidate_username: str, experience_id: int
 ):
     """Função para visualizar detalhes de uma experiência profissional
         de um candidato.
 
     Args:
         request (HttpRequest): A requisição HTTP.
-        candidate_id (int): O ID do candidato.
+        candidate_username (str): O nome de usuario do candidato.
         professional_id (int): O ID da experiência profissional.
 
     Returns:
@@ -144,7 +165,8 @@ def professional_experience_detail(
         reenderiza o template com os detalhes da
         experiência profissional.
     """
-    candidate = get_object_or_404(Candidate, id=candidate_id)
+    user = get_object_or_404(User, username=candidate_username)
+    candidate = get_object_or_404(Candidate, id=user)
     professional_experience = get_object_or_404(
         ProfessionalExperience, id=experience_id, candidate=candidate
     )
@@ -170,23 +192,30 @@ def professional_experience_detail(
 
 @login_required(login_url="user_login")
 def professional_experience_create(
-    request: HttpRequest, candidate_id: int
+    request: HttpRequest, candidate_username: str
 ) -> HttpResponse:
-    """funçao pra criar uma experincia profissional
+    """cria experiencias profissionais para um candidato
 
     Args:
-        request (HttpRequest): a requisição Http.(GET OU POST)
-        candidate_id (int): id do candidato
+        request (HttpRequest): GET ou POST
+        candidate_username (str): Nome do Usario
 
     Returns:
-        HttpResponse: Redireciona a pagian inicial ou
-        reenderiza um template HTML com o formulario a ser preenchido
+        HttpResponse: Retorna um formulario vazio ou redireciona para o curriculo
     """
-    candidate = get_object_or_404(Candidate, id=candidate_id)
+    candidate = get_object_or_404(Candidate, id=request.user)
     if request.method == "POST":
         form = ProfessionalExperienceForm(request.POST)
+        # Recebo o formulario preenchido(porem esse formulario nao
+        # nao tem o candidato)
         if form.is_valid():
-            form.save()
+            # pego as informaçoes desse formulario salvo(porem nao comitado)
+            professional_experience = form.save(commit=False)
+            # Adiciono o candidato dono desse formulario
+            professional_experience.candidate = candidate
+            # Salvo agora com o candidato correto
+            professional_experience.save()
+            # redireciono o usuario para a pagina do curriculo
             return redirect(f"/recruitment/candidato/{candidate.id}/curriculo")
     else:
         form = ProfessionalExperienceForm()
@@ -197,6 +226,7 @@ def professional_experience_create(
     )
 
 
+# TODO: matar todas as views de lista
 @login_required(login_url="user_login")
 @user_passes_test(staff_required)
 def professional_experience_list(
@@ -220,25 +250,25 @@ def professional_experience_list(
     )
 
 
-# Education_views
+# ________________________Education_views________________________#
+
+
 @login_required(login_url="user_login")
 def education_detail(
-    request: HttpRequest, candidate_id: int, education_id: int
+    request: HttpRequest, candidate_username: str, education_id: int
 ) -> HttpResponse:
-    """Função para visualizar detalhes da Formação Educacional
-        de um candidato.
+    """Recebe um nome de usuario e o id da escolaridade para edição
 
     Args:
-        request (HttpRequest): a requisição Http.(GET OU POST)
-        candidate_id (int): O ID do candidato.
-        professional_id (int): O ID da Escolaridade do candidato
+        request (HttpRequest): get ou post
+        username (str): Nome do Usuario
+        education_id (int): id das escolaridades
 
     Returns:
-        HttpResponse: Redireciona a pagian inicial ou
-        reenderiza o template com os detalhes da
-        experiência profissional.
+        HttpResponse: leva o formulario ou redireciona para o curriculo
     """
-    candidate = get_object_or_404(Candidate, id=candidate_id)
+    user = get_object_or_404(User, username=candidate_username)
+    candidate = get_object_or_404(Candidate, id=user)
     education = get_object_or_404(Education, id=education_id, candidate=candidate)
     if request.method == "POST":
         form = EducationForm(request.POST, instance=education)
@@ -260,25 +290,34 @@ def education_detail(
 
 
 @login_required(login_url="user_login")
-def education_create(request: HttpRequest, candidate_id: int) -> HttpResponse:
-    """Função pra criar uma Formação Educacional
+def education_create(request: HttpRequest, candidate_username: str) -> HttpResponse:
+    """cria uma formaçao academica do Candidato
 
     Args:
-        request (HttpRequest): a requisição Http.(GET OU POST)
-        candidate_id (int): id do candidato
+        request (HttpRequest): (POST,GET)
+        candidate_username (str): ID do candidato
 
     Returns:
-        HttpResponse: Redireciona a pagian inicial ou
-        reenderiza um template HTML com o formulario a ser preenchido
+        HttpResponse: Retorna um formulario para adicionar uma formaçao
+        redireciona para a pagina do curriculo
     """
-    candidate = get_object_or_404(Candidate, id=candidate_id)
+    user = get_object_or_404(User, username=candidate_username)
+    candidate = get_object_or_404(Candidate, id=user.id)
     if request.method == "POST":
+        # Recebo o formulario preenchido(porem esse formulario nao
+        # nao tem o candidato)
         form = EducationForm(request.POST)
         if form.is_valid():
-            form.save()
+            # pego as informaçoes desse formulario salvo(porem nao comitado)
+            education = form.save(commit=False)
+            # Adiciono o candidato dono desse formulario
+            education.candidate = candidate
+            # Salvo agora com o candidato correto
+            education.save()
             return redirect(f"/recruitment/candidato/{candidate.id}/curriculo")
     else:
         form = EducationForm()
+
     return render(
         request,
         "recruitiment/education_create.html",
@@ -308,16 +347,22 @@ def education_list(request: HttpRequest, candidate_id: int) -> HttpResponse:
     )
 
 
-# Curriculo Completo
+# ________________________Curriculo Completo________________________#
 
 
 @login_required(login_url="user_login")
-def curriculum(request: HttpRequest, candidate_id: int) -> HttpResponse:
-    candidate = get_object_or_404(Candidate, id=candidate_id)
+def curriculum(request: HttpRequest, candidate_username: str) -> HttpResponse:
+    user = get_object_or_404(User, username=candidate_username)
+    candidate = get_object_or_404(Candidate, id=user)
     educations = Education.objects.filter(candidate=candidate)
     experiences = ProfessionalExperience.objects.filter(candidate=candidate)
     return render(
         request,
         "recruitiment/curriculum.html",
-        {"candidate": candidate, "educations": educations, "experiences": experiences},
+        {
+            "candidate": candidate,
+            "educations": educations,
+            "experiences": experiences,
+            "user": user,
+        },
     )

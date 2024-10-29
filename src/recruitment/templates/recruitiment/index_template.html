@@ -4,7 +4,7 @@
 {% load django_bootstrap5 %}
 {% block content %}
 <h1 class="display-1">Banco de Talentos</h1>
-<form method="POST" action="{% url 'index' %}">
+<form method="POST" action="{% url 'index' username=username %}">
     <div class="card" id="curriculoCard">
         <div class="card-header">
             Criar um Curriculo
@@ -13,6 +13,7 @@
             <h5 class="card-title">Bem-vindo ao banco de talentos da Pegho</h5>
             <p class="card-text">Vamos criar seu curriculo, clique no botão abaixo</p>
             <button type="submit" class="btn btn-primary">Criar um Curriculo</button>
+            <button type="submit" class="btn btn-secondary">Ver seu curriculo</button>
         </div>
     </div>
     {% csrf_token %}

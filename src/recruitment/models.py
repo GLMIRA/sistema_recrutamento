@@ -21,12 +21,12 @@ class Candidate(models.Model):
         regex=r"[1-9]{2} 9[0-9]{4}-[0-9]{4}",
         message="O telefone deve estar no formato: 99 99999-9999",
     )
-    # user = models.OneToOneField(
-    # User,
-    # on_delete=models.CASCADE,
-    # name="id",
-    # primary_key=True,
-    # )
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        name="id",
+        primary_key=True,
+    )
     name = models.CharField(
         verbose_name="Nome do Candidato",
         max_length=100,
@@ -80,7 +80,7 @@ class Candidate(models.Model):
             )
 
     def __str__(self):
-        return f"{self.id} - {self.name}"
+        return f"{self.name}"
 
     class Meta:
         verbose_name = "Candidato"
@@ -143,7 +143,11 @@ class Education(models.Model):
         ("SI", "Superior Incompleto"),
         ("SC", "Superior Completo"),
     )
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+
+    candidate = models.ForeignKey(
+        Candidate, related_name="educations", on_delete=models.CASCADE
+    )
+
     institution = models.CharField(
         verbose_name="Nome da Instituição de Formaçâo",
         max_length=200,

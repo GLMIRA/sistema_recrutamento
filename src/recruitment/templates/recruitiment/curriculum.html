@@ -25,7 +25,6 @@
     }
 </style>
 {% load recruitment_tags %}
-{% load recruitment_tags %}
 <div class="card my-4">
     <div class="card-header bg-primary text-white">
         <h3 class="mb-0">Dados Pessoais</h3>
@@ -52,6 +51,8 @@
                 <a href="{{ candidate.url_linkedin }}" target="_blank">{{ candidate.url_linkedin }}</a>
             </dd>
         </dl>
+        <a href="{% url 'candidate_detail' username=candidate.id %}" class="btn btn-primary">Editar dados
+            Pessoais</a>
     </div>
 </div>
 
@@ -70,7 +71,7 @@
     {% for education in educations %}
     <tr>
         <td>
-            <a href="{% url 'education_detail' candidate_id=education.candidate.id education_id=education.id %}">
+            <a href="{% url 'education_detail' candidate_username=candidate.id education_id=education.id %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-pencil-square" viewBox="0 0 16 16">
                     <path
@@ -111,7 +112,7 @@
     <tr>
         <td>
             <a
-                href="{% url 'professional_experience_detail' candidate_id=experience.candidate.id experience_id=experience.id %}">
+                href="{% url 'professional_experience_detail' candidate_username=candidate.id experience_id=experience.id %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-pencil-square" viewBox="0 0 16 16">
                     <path

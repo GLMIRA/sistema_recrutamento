@@ -24,31 +24,24 @@ class LoginForm(forms.Form):
     )
 
 
-# class LoginForm(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ["username", "password"]
-#         widgets = {
-#             "username": forms.TextInput(
-#                 attrs={"placeholder": "Username", "class": "form-control"}
-#             ),
-#             "password": forms.PasswordInput(
-#                 attrs={"placeholder": "Password", "class": "form-control"}
-#             ),
-#         }
-
-
 class CandidateForm(forms.ModelForm):
     class Meta:
         model = models.Candidate
-        fields = ["name", "birthday", "sex", "breed", "phone", "email", "url_linkedin"]
+        fields = [
+            "name",
+            "birthday",
+            "sex",
+            "breed",
+            "phone",
+            "email",
+            "url_linkedin",
+        ]
 
 
 class ProfessionalExperienceForm(forms.ModelForm):
     class Meta:
         model = models.ProfessionalExperience
         fields = [
-            # "candidate",
             "position",
             "company",
             "start_date",
@@ -62,7 +55,6 @@ class EducationForm(forms.ModelForm):
         model = models.Education
         fields = [
             # TODO: PRoblemas com os formularios de criar e editar
-            # "candidate",
             "institution",
             "level",
             "course",
