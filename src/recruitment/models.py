@@ -144,9 +144,7 @@ class Education(models.Model):
         ("SC", "Superior Completo"),
     )
 
-    candidate = models.ForeignKey(
-        Candidate, related_name="educations", on_delete=models.CASCADE
-    )
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
 
     institution = models.CharField(
         verbose_name="Nome da Instituição de Formaçâo",

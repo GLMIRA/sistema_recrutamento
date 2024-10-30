@@ -35,7 +35,14 @@ docker build -t {{nome da imagem}} . # subistitua {{nome da imagem}} por um nome
 4. Rode o container:
 
 ```bash
-docker run -p 8000:8000 {{nome da imagem}} # subistitua {{nome da imagem}} pelo nome utilizado no passo 3
+docker run --name {{nome do conteiner}} -p 8000:8000 {{nome da imagem}} # subistitua {{nome da imagem}} pelo nome utilizado no passo 3
 ```
 
-5. Acesse a aplicação no browser de sua preferência pelo endereço `http://localhost:8000`
+5. Crie seu superuser:
+
+```bash
+docker exec -it {{nome do conteiner}} /bin/sh # acessando o shell do conteiner
+python manage.py createsuperuser #Criando superuser
+```
+
+6. Acesse a aplicação no browser de sua preferência pelo endereço `http://localhost:8000`
