@@ -16,9 +16,9 @@ router_education_api.register(
     r"educations", views_apis.EducationViewSet, basename="candidate-educations"
 )
 router_professional_experiences_api.register(
-    r"educations",
+    r"experiences",
     views_apis.ProfessionalExperienceViewSet,
-    basename="candidate-professional_expereinces",
+    basename="candidate-experiences",
 )
 
 urlpatterns = [

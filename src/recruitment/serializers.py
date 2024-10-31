@@ -41,10 +41,6 @@ class ProfessionalExperienceSerializer(serializers.ModelSerializer):
 
 
 class CandidateSerializer(serializers.ModelSerializer):
-
-    educations = EducationSerializer(many=True, read_only=True)
-    prfessional_experience = ProfessionalExperienceSerializer(many=True, read_only=True)
-
     class Meta:
         model = models.Candidate
         fields = "__all__"

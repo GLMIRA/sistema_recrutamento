@@ -54,7 +54,6 @@ class EducationForm(forms.ModelForm):
     class Meta:
         model = models.Education
         fields = [
-            # TODO: PRoblemas com os formularios de criar e editar
             "institution",
             "level",
             "course",

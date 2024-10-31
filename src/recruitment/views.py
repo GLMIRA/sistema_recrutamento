@@ -14,12 +14,15 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 
-def staff_required(user):
-    return user.is_staff
-
-
 def user_register(request: HttpRequest):
-    """"""
+    """Registra um Usuario
+
+    Args:
+        request (HttpRequest): GET,POST
+
+    Returns:
+         HttpResponse: Retorna um formulario vazio ou redireciona para login
+    """
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
@@ -34,6 +37,14 @@ def user_register(request: HttpRequest):
 
 
 def user_login(request: HttpRequest):
+    """Faz o login do usuario
+
+    Args:
+        request (HttpRequest): GET,POST
+
+    Returns:
+        HttpResponse: Retorna um formulario vazio ou redireciona para o index da aplicação
+    """
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -53,15 +64,23 @@ def user_login(request: HttpRequest):
 
 @login_required(login_url="user_login")
 def index(request: HttpRequest):
+    """Index da aplicação
+
+    Args:
+        request (HttpRequest): GET,POST
+
+    Returns:
+         HttpResponse: Retorna um template, verifica se o usuario tem um candidato cadastrado
+         se sim redireciona ele para seu curriculo se nao mostra uma mensagem na tela
+         e pede para ele cadastrar um candidato.
+    """
     candidate_exists = Candidate.objects.filter(id=request.user.id).exists()
     if request.method == "POST":
         action = request.POST.get("action")
-        print(f"Action: {action}")  # Debug
         if action == "view":
             if candidate_exists:
                 return redirect(f"/recruitment/candidato/curriculo")
             else:
-                print("entrei aqui modal=true")
                 return render(
                     request,
                     "recruitiment/index_template.html",
@@ -283,6 +302,14 @@ def education_create(request: HttpRequest) -> HttpResponse:
 
 @login_required(login_url="user_login")
 def curriculum(request: HttpRequest) -> HttpResponse:
+    """Mostra o curriculo
+
+    Args:
+        request (HttpRequest): GET.
+
+    Returns:
+        HttpResponse: Retorna o curriculo do candidato.
+    """
     candidate = get_object_or_404(Candidate, id=request.user)
     educations = Education.objects.filter(candidate=candidate)
     experiences = ProfessionalExperience.objects.filter(candidate=candidate)
