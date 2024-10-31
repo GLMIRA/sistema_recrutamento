@@ -1,0 +1,25 @@
+{% extends "recruitiment/layout.html" %}
+
+{% block content %}
+
+<h1>Login</h1>
+
+{% load django_bootstrap5 %}
+
+<form method="POST" class="row g-3">{% csrf_token %}
+
+
+    <div class="col-md-6 offset-md-3">
+        {% bootstrap_field form.username placeholder="Username" %}
+    </div>
+    <div class="col-md-6 offset-md-3">
+        {% bootstrap_field form.password placeholder="Password" %}
+    </div>
+    <div class="col-12 text-center">
+        <button type="submit" class="btn btn-primary me-2">Entrar</button>
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+    </div>
+</form>
+{% endblock %}

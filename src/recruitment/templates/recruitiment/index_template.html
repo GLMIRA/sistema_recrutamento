@@ -1,0 +1,95 @@
+{% extends "recruitiment/layout.html" %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% block title %}Banco de Talentos - Pegho{% endblock %}
+{% block content %}
+
+<main class="container mt-4">
+    <h1 class="display-1">Banco de Talentos</h1>
+
+    <form method="POST" action="{% url 'index' %}">
+        {% csrf_token %}
+        <div class="card" id="curriculoCard">
+            <div class="card-header">Gerenciar Currículo</div>
+            <div class="card-body">
+                <h5 class="card-title">Bem-vindo ao banco de talentos da Pegho</h5>
+                <p class="card-text">Você pode criar ou visualizar seu currículo.</p>
+                <button type="submit" class="btn btn-primary" name="action" value="create">Criar um Currículo</button>
+                <button type="submit" class="btn btn-secondary" name="action" value="view">Ver seu Currículo</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalAlert" tabindex="-1" aria-labelledby="modalAlertLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAlertLabel">Atenção</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Opss! Você não tem um currículo cadastrado.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- Incluindo jQuery e Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#modalAlert').modal('show');
+    });
+
+    // Modo escuro
+    const toggleButton = document.getElementById('darkModeToggle');
+    const isDarkMode = localStorage.getItem('dark-mode') === 'enabled';
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        if (isDark) {
+            localStorage.setItem('dark-mode', 'enabled');
+            toggleButton.innerHTML = '🌞'; // Ícone de sol
+        } else {
+            localStorage.removeItem('dark-mode');
+            toggleButton.innerHTML = '🌙'; // Ícone de lua
+        }
+    }
+
+    // Aplica o modo escuro se estiver salvo
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        toggleButton.innerHTML = '🌞'; // Ícone de sol
+    }
+
+    toggleButton.addEventListener('click', toggleDarkMode);
+</script>
+
+<style>
+    body.dark-mode {
+        background-color: #121212;
+        color: #ffffff;
+    }
+
+    .dark-mode .modal-content {
+        background-color: #343a40;
+        color: #ffffff;
+    }
+
+    .dark-mode .btn-secondary {
+        background-color: #444;
+        color: #ffffff;
+    }
+</style>
+
+{% endblock %}
