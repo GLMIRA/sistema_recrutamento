@@ -1,48 +1,59 @@
-# sistema_recrutamento
-Sistema de recrutamento para uma empresa 
+# Projeto de uma Empresa de Recrutamento
 
-candidato/<int:id_candidato>/experiencia/<id_experiencia> --> detalhe de experiencia
-candidato/<int:id_candidato>/experiencia/ --> lista de experiencias
-candidato/<int:id_candidato>/experiencia/criar/ --> criar experiencia
+## Descrição
+Esse sistema foi desenvolvido como parte de um desafio técnico para uma vaga de estágio.
+
+O projeto consiste na criação de um sistema de cadastramento de currículos
+ para uma empresa de recrutamento e seleção de candidatos. 
+ Nele, o usuário pode criar seu currículo com dados pessoais
+e suas experiências profissionais.
+
+## Pré-requisitos
+- Python 
+- Django 
+- SQLite3
+- Django REST Framework (DRF)
+- DRF Nested Routers
+- Docker 
 
 
-
-
-## Executando o conteiner
-
-> ***Pré requisitos***: Ter o Docker instalado. para instlação acesse a [documentação do docker](https://www.docker.com/)
-
-Para rodar a aplicação siga o seguinte passo a passo:
-
-1. Clone este projeto:
-
-```bash
-git clone https://github.com/GLMIRA/sistema_recrutamento.git
-```
-
-2. Acesse a pasta do projeto:
+-------------------------------------
+## Instalação
 
 ```bash
+# Clone o repositório 
+git clone https://github.com/GLMIRA/sistema_recrutamento.git 
+
+# Navegue até o repositório 
 cd sistema_recrutamento
+
+# Instale as dependências 
+pip install -r requirements.txt
 ```
 
-3. Buildar a imagem do container:
 
-```bash
-docker build -t {{nome da imagem}} . # subistitua {{nome da imagem}} por um nome de sua preferência
+-----------------------------
+## Executar o projeto 
+```Bash
+cd src # Entrando no diretório onde está o manage.py
+
+python3 manage.py migrate # Criando as tabelas no banco de dados
+
+python3 manage.py createsuperuser # Comando para criar o superusuário 
+
+python3 manage.py runserver # Iniciando o servidor
+
 ```
+> Para mais informações sobre os comandos acima, consulte a [documentção do Django](https://docs.djangoproject.com/en/5.1/intro/tutorial01/)
 
-4. Rode o container:
 
-```bash
-docker run --name {{nome do conteiner}} -p 8000:8000 {{nome da imagem}} # subistitua {{nome da imagem}} pelo nome utilizado no passo 3
-```
+----------------------------
 
-5. Crie seu superuser:
+## Manual da interfaçe Grafica
+Para o manual da [interface grafica](./INTRFACE.md) 
 
-```bash
-docker exec -it {{nome do conteiner}} /bin/sh # acessando o shell do conteiner
-python manage.py createsuperuser #Criando superuser
-```
+## Execute com o Docker
+Para saber como executar o Docker, veja o [manual do Docker](./DOCKER.md) deste projeto.
 
-6. Acesse a aplicação no browser de sua preferência pelo endereço `http://localhost:8000`
+## Manual das Api's
+Para o manual da [api](./API.md)
