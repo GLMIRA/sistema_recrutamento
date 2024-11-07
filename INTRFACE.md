@@ -1,7 +1,7 @@
 > ***Pré requisitos***: Estar com o projeto rodando
 
 # Manual da Interface 
-Aqui irei te explicar como o sistema funciona e como funciona a interface grafica 
+Como usar a interface  
 
 
 ## Passo a Passo
